@@ -7,7 +7,10 @@ The reference board to use this library is the [LoadCell Nanoshield](https://www
 
 To install, just copy it under &lt;Arduino sketch folder&gt;/libraries/
 
-The **MeasureWeight** example shows how to do do a simple weight measurement using a load cell.
+The following examples are provided:
+
+* **ReadWeight** shows how to do a simple weight measurement using a load cell.
+* **MultiWeight** shows how to read more than one weight using multiple load cells.
 
 ---
 Copyright (c) 2015 Circuitar
