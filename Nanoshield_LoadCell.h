@@ -13,20 +13,26 @@
 class Nanoshield_LoadCell
 {
   public:
-    Nanoshield_LoadCell(float maxWeight, int cs = 8);
+    Nanoshield_LoadCell(float capacity, float sensitivity, bool hiGain = true, int cs = 8);
     void begin();
     void setZero();
-    bool dataReady();
-    int32_t read();
-    float readWeight();
+    bool updated();
+    int32_t getValue();
+    int32_t getRawValue();
+    float getWeight();
+    void TIMER2_OVF_ISR();
 
   private:
     static SPISettings spiSettings;
     static int timeout;
   
     int cs;
+    bool newData;
     int32_t offset;
-    float maxWeight;
+    float capacity;
+    float sensitivity;
+    bool hiGain;
+    int32_t value;
 };
 
 #endif

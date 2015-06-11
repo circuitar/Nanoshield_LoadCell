@@ -7,8 +7,12 @@
 #include <SPI.h>
 #include <Nanoshield_LoadCell.h>
 
-// LoadCell Nanoshield with a 100kg load cell and jumper on pin D8
-Nanoshield_LoadCell loadCell(100000, 8);
+// LoadCell Nanoshield with the following parameters:
+//  - Load cell capacity: 100kg
+//  - Load cell sensitivity: 3mV/V
+//  - High gain (GAIN jumper closed)
+//  - Jumper on pin D8
+Nanoshield_LoadCell loadCell(100000, 3, true, 8);
 
 void setup() {
   Serial.begin(9600);
@@ -22,9 +26,7 @@ void setup() {
 }
 
 void loop() {
-  // If a reading has been completed, read weight from load cell
-  if (loadCell.dataReady()) {
-    Serial.print(loadCell.readWeight(), 0);
-    Serial.println("g");
-  }
+  Serial.print(loadCell.getWeight(), 0);
+  Serial.println("g");
+  delay(100);
 }

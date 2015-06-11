@@ -5,6 +5,9 @@ This is our Arduino library to measure weight using load cells with the ADS1230 
 
 The reference board to use this library is the [LoadCell Nanoshield](https://www.circuitar.com.br/en/nanoshields/modules/loadcell/) from Circuitar.
 
+**Note**: this library uses Timer2 on the ATmega microcontroller.
+On ATmega168 and ATmega328, usage of this library will interfere with the `tone()` function.
+
 To install, just copy it under &lt;Arduino sketch folder&gt;/libraries/
 
 The following examples are provided:
