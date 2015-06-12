@@ -5,6 +5,15 @@ This is our Arduino library to measure weight using load cells with the ADS1230 
 
 The reference board to use this library is the [LoadCell Nanoshield](https://www.circuitar.com.br/en/nanoshields/modules/loadcell/) from Circuitar.
 
+Library features include:
+
+* Conversion to weight units, based on load cell capacity and sensitivity
+* Moving average filter, with configurable number of samples
+* Set zero weight point (tare)
+* Get measurement in weight units or raw 20-bit value
+* Continuous sampling using hardware timer (Timer 2)
+* ADS1230 offset calibration
+
 **Note**: this library uses Timer2 on the ATmega microcontroller.
 On ATmega168 and ATmega328, usage of this library will interfere with the `tone()` function.
 
@@ -17,6 +26,7 @@ The following examples are provided:
 * **ReadRawValue** reads the raw 20-bit integer value from the ADS1230 IC.
 * **ReadWeightNoAveraging** reads weight without averaging (default is to average the last 10 samples).
 * **ReadWeightLowGain** use low gain to measure a wider weight range.
+* **OffsetCalibration** shows how to use offset calibration.
 
 ---
 Copyright (c) 2015 Circuitar

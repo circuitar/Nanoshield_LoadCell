@@ -5,6 +5,7 @@
  * This software is released under the MIT license. See the attached LICENSE file for details.
 */
 #include <Nanoshield_LoadCell.h>
+#include <util/atomic.h>
 
 // Use Timer 2 prescaler of 1, 8, 32, 64, 128, 256 or 1024
 #define LOADCELL_PRESCALER     64
@@ -37,6 +38,7 @@ Nanoshield_LoadCell::Nanoshield_LoadCell(float capacity, float sensitivity, int 
   this->capacity = capacity;
   this->sensitivity = sensitivity;
   this->hiGain = hiGain;
+  this->calibrateOnNextCycle = false;
   
   if (numSamples > LOADCELL_MAX_SAMPLES) {
     this->numSamples = LOADCELL_MAX_SAMPLES;
@@ -53,7 +55,10 @@ Nanoshield_LoadCell::Nanoshield_LoadCell(float capacity, float sensitivity, int 
   loadCells[loadCellCount++] = this;
 }
 
-void Nanoshield_LoadCell::begin() {
+void Nanoshield_LoadCell::begin(bool calibrate) {
+  // Calibrate on first cycle
+  calibrateOnNextCycle = calibrate;
+
   // Reset circular buffer
   resetBuffer();
 
@@ -69,36 +74,72 @@ void Nanoshield_LoadCell::begin() {
   TIMSK2 = 0b00000001;
 }
 
-void Nanoshield_LoadCell::setZero() {
-  offset = samplesSum / actualSamples;
-}
-
 bool Nanoshield_LoadCell::updated() {
-  return newData && actualSamples >= numSamples;
+  bool nd;
+  uint8_t as;
+  ATOMIC_BLOCK(ATOMIC_FORCEON) {
+    nd = newData;
+    as = actualSamples;
+  }
+  return nd && as >= numSamples;
 }
 
 int32_t Nanoshield_LoadCell::getValue() {
-  newData = false;
-  return samplesSum / actualSamples - offset;
+  int32_t ss;
+  uint8_t as;
+  int32_t of;
+  ATOMIC_BLOCK(ATOMIC_FORCEON) {
+    newData = false;
+    ss = samplesSum;
+    as = actualSamples;
+    of = offset;
+  }
+  return ss / as - of;
 }
 
 int32_t Nanoshield_LoadCell::getRawValue() {
-  newData = false;
-  return samplesSum / actualSamples;
+  int32_t ss;
+  uint8_t as;
+  ATOMIC_BLOCK(ATOMIC_FORCEON) {
+    newData = false;
+    ss = samplesSum;
+    as = actualSamples;
+  }
+  return ss / as;
 }
 
 int32_t Nanoshield_LoadCell::getLatestValue() {
-  newData = false;
-  return samples[tail] - offset;
+  int32_t st;
+  int32_t of;
+  ATOMIC_BLOCK(ATOMIC_FORCEON) {
+    newData = false;
+    st = samples[tail];
+    of = offset;
+  }
+  return st - of;
 }
 
 int32_t Nanoshield_LoadCell::getLatestRawValue() {
-  newData = false;
-  return samples[tail];
+  int32_t st;
+  ATOMIC_BLOCK(ATOMIC_FORCEON) {
+    newData = false;
+    st = samples[tail];
+  }
+  return st;
 }
 
 float Nanoshield_LoadCell::getWeight() {
   return capacity * getValue() / ((1L << 20) * (hiGain ? 128 : 64) * (sensitivity / 1000));
+}
+
+void Nanoshield_LoadCell::setZero() {
+  offset = getRawValue();
+}
+
+void Nanoshield_LoadCell::calibrate() {
+  ATOMIC_BLOCK(ATOMIC_FORCEON) {
+    calibrateOnNextCycle = true;
+  }
 }
 
 void Nanoshield_LoadCell::TIMER2_OVF_ISR() {
@@ -116,37 +157,45 @@ void Nanoshield_LoadCell::TIMER2_OVF_ISR() {
     sample <<= 8;
     sample /= 1L << 12;
 
-    // Save sample in circular buffer
-    if (++actualSamples > numSamples) {
-      // Buffer full, remove oldest sample (head), removing it from the sum
-      actualSamples = numSamples;
-      samplesSum -= samples[head];
-      if (++head >= numSamples) {
-        head = 0;
+    if (calibrateOnNextCycle) {
+      // Send at least two more clock pulses to initiate ADS1230 offset calibration, if requested
+      SPI.transfer(0);
+      calibrateOnNextCycle = false;
+    } else {
+      // Save sample in circular buffer
+      if (++actualSamples > numSamples) {
+        // Buffer full, remove oldest sample (head), removing it from the sum
+        actualSamples = numSamples;
+        samplesSum -= samples[head];
+        if (++head >= numSamples) {
+          head = 0;
+        }
       }
+      
+      // Put new sample in the circular buffer tail and add it to the sum
+      if (++tail >= numSamples) {
+        tail = 0;
+      }
+      samples[tail] = sample;
+      samplesSum += sample;
+      
+      // Inform there is new data
+      newData = true;
     }
-    
-    // Put new sample in the circular buffer tail and add it to the sum
-    if (++tail >= numSamples) {
-      tail = 0;
-    }
-    samples[tail] = sample;
-    samplesSum += sample;
-    
-    // Inform there is new data
-    newData = true;
   }
   digitalWrite(cs, HIGH);
   SPI.endTransaction();
 }
 
 void Nanoshield_LoadCell::resetBuffer() {
-  newData = false;
-  actualSamples = 0;
-  samplesSum = 0;
-  head = 0;
-  tail = numSamples - 1;
-  samples[tail] = 0;
+  ATOMIC_BLOCK(ATOMIC_FORCEON) {
+    newData = false;
+    actualSamples = 0;
+    samplesSum = 0;
+    head = 0;
+    tail = numSamples - 1;
+    samples[tail] = 0;
+  }
 }
 
 ISR(TIMER2_OVF_vect) {
