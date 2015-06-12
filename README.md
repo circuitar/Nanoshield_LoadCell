@@ -14,6 +14,9 @@ The following examples are provided:
 
 * **ReadWeight** shows how to do a simple weight measurement using a load cell.
 * **MultiWeight** shows how to read more than one weight using multiple load cells.
+* **ReadRawValue** reads the raw 20-bit integer value from the ADS1230 IC.
+* **ReadWeightNoAveraging** reads weight without averaging (default is to average the last 10 samples).
+* **ReadWeightLowGain** use low gain to measure a wider weight range.
 
 ---
 Copyright (c) 2015 Circuitar

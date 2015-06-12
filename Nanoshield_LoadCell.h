@@ -10,15 +10,20 @@
 #include <Arduino.h>
 #include <SPI.h>
 
+#define LOADCELL_MAX_SAMPLES 10
+
 class Nanoshield_LoadCell
 {
   public:
-    Nanoshield_LoadCell(float capacity, float sensitivity, bool hiGain = true, int cs = 8);
+    Nanoshield_LoadCell(float capacity, float sensitivity, int cs = 8,
+                        bool hiGain = true, int numSamples = LOADCELL_MAX_SAMPLES);
     void begin();
     void setZero();
     bool updated();
     int32_t getValue();
     int32_t getRawValue();
+    int32_t getLatestValue();
+    int32_t getLatestRawValue();
     float getWeight();
     void TIMER2_OVF_ISR();
 
@@ -32,7 +37,14 @@ class Nanoshield_LoadCell
     float capacity;
     float sensitivity;
     bool hiGain;
-    int32_t value;
+    uint8_t actualSamples;
+    int32_t samplesSum;
+    uint8_t numSamples;
+    uint8_t head;
+    uint8_t tail;
+    int32_t samples[LOADCELL_MAX_SAMPLES];
+    
+    void resetBuffer();
 };
 
 #endif

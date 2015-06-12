@@ -29,21 +29,35 @@ static Nanoshield_LoadCell* loadCells[15]; // Pointers to all registered load ce
 static uint8_t loadCellCount = 0;          // Number of registered load cell objects
 static uint8_t t2Count = 0;                // Number of times Timer 2 has overflowed
 
-Nanoshield_LoadCell::Nanoshield_LoadCell(float capacity, float sensitivity, bool hiGain, int cs) {
+Nanoshield_LoadCell::Nanoshield_LoadCell(float capacity, float sensitivity, int cs,
+                                         bool hiGain, int numSamples) {
+  // Initialize fixed parameters
   this->cs = cs;
-  this->newData = false;
   this->offset = 0;
   this->capacity = capacity;
   this->sensitivity = sensitivity;
   this->hiGain = hiGain;
   
+  if (numSamples > LOADCELL_MAX_SAMPLES) {
+    this->numSamples = LOADCELL_MAX_SAMPLES;
+  } else if (numSamples < 1) {
+    this->numSamples = 1;
+  } else {
+    this->numSamples = numSamples;
+  }
+  
+  // Reset circular buffer
+  resetBuffer();
+
   // Register load cell
   loadCells[loadCellCount++] = this;
 }
 
 void Nanoshield_LoadCell::begin() {
-  this->newData = false;
+  // Reset circular buffer
+  resetBuffer();
 
+  // Initialize hardware resources
   pinMode(cs, OUTPUT);
   digitalWrite(cs, HIGH);
   SPI.begin();
@@ -56,21 +70,31 @@ void Nanoshield_LoadCell::begin() {
 }
 
 void Nanoshield_LoadCell::setZero() {
-  offset = value;
+  offset = samplesSum / actualSamples;
 }
 
 bool Nanoshield_LoadCell::updated() {
-  return newData;
+  return newData && actualSamples >= numSamples;
 }
 
 int32_t Nanoshield_LoadCell::getValue() {
   newData = false;
-  return value - offset;
+  return samplesSum / actualSamples - offset;
 }
 
 int32_t Nanoshield_LoadCell::getRawValue() {
   newData = false;
-  return value;
+  return samplesSum / actualSamples;
+}
+
+int32_t Nanoshield_LoadCell::getLatestValue() {
+  newData = false;
+  return samples[tail] - offset;
+}
+
+int32_t Nanoshield_LoadCell::getLatestRawValue() {
+  newData = false;
+  return samples[tail];
 }
 
 float Nanoshield_LoadCell::getWeight() {
@@ -83,18 +107,46 @@ void Nanoshield_LoadCell::TIMER2_OVF_ISR() {
   digitalWrite(cs, LOW);
   if (digitalRead(12) == LOW) {
     // Read data via SPI if /DRDY is low
-    value = 0;
-    value |= SPI.transfer(0);
-    value <<= 8;
-    value |= SPI.transfer(0);
-    value <<= 8;
-    value |= SPI.transfer(0);
-    value <<= 8;
-    value /= 1L << 12;
+    int32_t sample = 0;
+    sample |= SPI.transfer(0);
+    sample <<= 8;
+    sample |= SPI.transfer(0);
+    sample <<= 8;
+    sample |= SPI.transfer(0);
+    sample <<= 8;
+    sample /= 1L << 12;
+
+    // Save sample in circular buffer
+    if (++actualSamples > numSamples) {
+      // Buffer full, remove oldest sample (head), removing it from the sum
+      actualSamples = numSamples;
+      samplesSum -= samples[head];
+      if (++head >= numSamples) {
+        head = 0;
+      }
+    }
+    
+    // Put new sample in the circular buffer tail and add it to the sum
+    if (++tail >= numSamples) {
+      tail = 0;
+    }
+    samples[tail] = sample;
+    samplesSum += sample;
+    
+    // Inform there is new data
     newData = true;
   }
   digitalWrite(cs, HIGH);
   SPI.endTransaction();
+}
+
+void Nanoshield_LoadCell::resetBuffer() {
+  newData = false;
+  actualSamples = 0;
+  samplesSum = 0;
+  head = 0;
+  tail = numSamples - 1;
+  samples[tail] = 0;
 }
 
 ISR(TIMER2_OVF_vect) {

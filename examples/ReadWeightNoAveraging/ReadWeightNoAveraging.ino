@@ -1,10 +1,5 @@
 /**
- * Read weight from a load cell using the ADS1230 IC in the LoadCell Nanoshield.
- *
- * This example uses the following default settings:
- *  - CS pin set to D8 (D8 jumper closed)
- *  - High gain (GAIN jumper closed)
- *  - Averaging of the latest 10 samples
+ * Read weight from a load cell using the ADS1230 IC in the LoadCell Nanoshield, without averaging.
  *
  * Copyright (c) 2015 Circuitar
  * This software is released under the MIT license. See the attached LICENSE file for details.
@@ -12,8 +7,13 @@
 #include <SPI.h>
 #include <Nanoshield_LoadCell.h>
 
-// Load cell with 100kg capacity and 3mV/V sensitivity
-Nanoshield_LoadCell loadCell(100000, 3);
+// LoadCell Nanoshield with the following parameters:
+//  - Load cell capacity: 100kg
+//  - Load cell sensitivity: 3mV/V
+//  - CS on pin D8 (D8 jumper closed)
+//  - High gain (GAIN jumper closed)
+//  - No averaging (number of samples = 1)
+Nanoshield_LoadCell loadCell(100000, 3, 8, true, 1);
 
 void setup() {
   Serial.begin(9600);
