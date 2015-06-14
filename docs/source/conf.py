@@ -24,6 +24,11 @@ import subprocess
 
 # -- General configuration ------------------------------------------------
 
+# General information about the project.
+project = u'Nanoshield_LoadCell'
+copyright = u'2015, Circuitar'
+author = u'Circuitar'
+
 read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
 
 if read_the_docs_build:
@@ -52,11 +57,6 @@ source_suffix = '.rst'
 
 # The master toctree document.
 master_doc = 'index'
-
-# General information about the project.
-project = u'project'
-copyright = u'2015, Circuitar'
-author = u'Circuitar'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
