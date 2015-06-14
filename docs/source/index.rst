@@ -1,4 +1,6 @@
-.. include:: readme.rst
+.. include:: ../../README.rst
+   :end-before: ----
+   
 .. include:: class.rst
 
 .. toctree::
