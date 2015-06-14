@@ -230,8 +230,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  (master_doc, 'project.tex', u'project Documentation',
-   u'author', 'manual'),
+  (master_doc, 'Nanoshield_LoadCell.tex', u'Nanoshield_LoadCell Documentation',
+   u'Circuitar', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -260,7 +260,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'project', u'project Documentation',
+    (master_doc, 'Nanoshield_LoadCell', u'Nanoshield_LoadCell Documentation',
      [author], 1)
 ]
 
@@ -274,8 +274,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  (master_doc, 'project', u'project Documentation',
-   author, 'project', 'One line description of project.',
+  (master_doc, 'Nanoshield_LoadCell', u'Nanoshield_LoadCell Documentation',
+   author, 'Nanoshield_LoadCell', 'Arduino library to measure weight using load cells with the ADS1230 IC from Texas Instruments.',
    'Miscellaneous'),
 ]
 
