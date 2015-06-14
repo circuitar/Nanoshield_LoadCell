@@ -1,4 +1,6 @@
-/**
+/** @file Nanoshield_LoadCell.h
+ * Nanoshield_LoadCell Arduino library.
+ *
  * This is an Arduino library to measure weight using load cells with the ADS1230 IC from Texas Instruments.
  *
  * Copyright (c) 2015 Circuitar
@@ -44,14 +46,14 @@ class Nanoshield_LoadCell
      * Initializes the module.
      *
      * Initializes SPI, CS pin, Timer 2 interrupts and moving average circular buffer. Performs
-     * initial self-calibration if requested via the {@code calibrate} parameter.
+     * initial self-calibration if requested via the \p calibrate parameter.
      *
      * @param calibrate if true, performs ADS1230 offset calibration during initialization.
      */
     void begin(bool calibrate = true);
     
     /**
-     * Check if a new load cell reading is available.
+     * Checks if a new load cell reading is available.
      *
      * @return true if a new load cell reading is available.
      */
@@ -98,7 +100,7 @@ class Nanoshield_LoadCell
     void setZero();
 
     /**
-     * Perform ADS1230 offset calibration.
+     * Performs ADS1230 offset calibration.
      */
     void calibrate();
 
