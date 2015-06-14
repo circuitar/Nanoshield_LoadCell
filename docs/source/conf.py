@@ -41,8 +41,8 @@ if read_the_docs_build:
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['breathe']
-breathe_projects = { "project": "../xml/" }
-breathe_default_project = "project"
+breathe_projects = { "Nanoshield_LoadCell": "../xml/" }
+breathe_default_project = "Nanoshield_LoadCell"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

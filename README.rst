@@ -33,13 +33,13 @@ The following examples_ are provided:
 .. _ReadTheDocs: http://nanoshield-loadcell.readthedocs.org
 .. _GitHub: https://github.com/circuitar/Nanoshield_LoadCell
 .. _`LoadCell Nanoshield`: https://www.circuitar.com.br/en/nanoshields/modules/loadcell/
-.. _examples: https://github.com/circuitar/Nanoshield_LoadCell/blob/readthedocs/examples/
-.. _ReadWeight: https://github.com/circuitar/Nanoshield_LoadCell/blob/readthedocs/examples/ReadWeight/ReadWeight.ino
-.. _MultiWeight: https://github.com/circuitar/Nanoshield_LoadCell/blob/readthedocs/examples/MultiWeight/MultiWeight.ino
-.. _ReadRawValue: https://github.com/circuitar/Nanoshield_LoadCell/blob/readthedocs/examples/ReadRawValue/ReadRawValue.ino
-.. _ReadWeightNoAveraging: https://github.com/circuitar/Nanoshield_LoadCell/blob/readthedocs/examples/ReadWeightNoAveraging/ReadWeightNoAveraging.ino
-.. _ReadWeightLowGain: https://github.com/circuitar/Nanoshield_LoadCell/blob/readthedocs/examples/ReadWeightLowGain/ReadWeightLowGain.ino
-.. _OffsetCalibration: https://github.com/circuitar/Nanoshield_LoadCell/blob/readthedocs/examples/OffsetCalibration/OffsetCalibration.ino
+.. _examples: https://github.com/circuitar/Nanoshield_LoadCell/blob/master/examples/
+.. _ReadWeight: https://github.com/circuitar/Nanoshield_LoadCell/blob/master/examples/ReadWeight/ReadWeight.ino
+.. _MultiWeight: https://github.com/circuitar/Nanoshield_LoadCell/blob/master/examples/MultiWeight/MultiWeight.ino
+.. _ReadRawValue: https://github.com/circuitar/Nanoshield_LoadCell/blob/master/examples/ReadRawValue/ReadRawValue.ino
+.. _ReadWeightNoAveraging: https://github.com/circuitar/Nanoshield_LoadCell/blob/master/examples/ReadWeightNoAveraging/ReadWeightNoAveraging.ino
+.. _ReadWeightLowGain: https://github.com/circuitar/Nanoshield_LoadCell/blob/master/examples/ReadWeightLowGain/ReadWeightLowGain.ino
+.. _OffsetCalibration: https://github.com/circuitar/Nanoshield_LoadCell/blob/master/examples/OffsetCalibration/OffsetCalibration.ino
 
 ----
 

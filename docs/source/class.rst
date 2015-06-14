@@ -1,6 +1,6 @@
 Class Documentation
--------------------
+===================
 
 .. doxygenclass:: Nanoshield_LoadCell
-   :project: project
+   :project: Nanoshield_LoadCell
    :members:
