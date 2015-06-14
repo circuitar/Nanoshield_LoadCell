@@ -16,7 +16,7 @@ Library features include:
 * Continuous sampling using hardware timer (Timer 2)
 * ADS1230 offset calibration
 
-**Note**: this library uses Timer2 on the ATmega microcontroller.
+**Note**: this library uses Timer 2 on the ATmega microcontroller.
 On ATmega168 and ATmega328, usage of this library will interfere with the `tone()` function.
 
 To install, just copy it under ``<Arduino sketch folder>/libraries/``
@@ -27,7 +27,7 @@ The following examples_ are provided:
 * MultiWeight_ shows how to read more than one weight using multiple load cells.
 * ReadRawValue_ reads the raw 20-bit integer value from the ADS1230 IC.
 * ReadWeightNoAveraging_ reads weight without averaging (default is to average the last 10 samples).
-* ReadWeightLowGain_ use low gain to measure a wider weight range.
+* ReadWeightLowGain_ uses low gain to measure a wider weight range.
 * OffsetCalibration_ shows how to use offset calibration.
 
 .. _ReadTheDocs: http://nanoshield-loadcell.readthedocs.org
