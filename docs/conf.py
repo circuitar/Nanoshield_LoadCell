@@ -28,6 +28,6 @@ htmlhelp_basename = 'Nanoshield_LoadCelldoc'
 latex_elements = {
 }
 latex_documents = [
-  (master_doc, 'Nanoshield_LoadCell.tex', u'Nanoshield_LoadCell Documentation',
+  (master_doc, 'Nanoshield_LoadCell.tex', u'Nanoshield\_LoadCell Documentation',
    u'Nanoshield_LoadCell', 'manual'),
 ]
