@@ -3,8 +3,8 @@ Nanoshield_LoadCell
 
 This is an Arduino library to measure weight using load cells with the ADS1230 IC from Texas Instruments.
 
-* Source code available on GitHub_
-* Full documentation available on ReadTheDocs_
+* Source code available on GitHub_: https://github.com/circuitar/Nanoshield_LoadCell
+* Full documentation available on ReadTheDocs_: http://nanoshield-loadcell.readthedocs.org/
 * Reference board to use this library is the `LoadCell Nanoshield`_ from Circuitar
 
 Library features include:
