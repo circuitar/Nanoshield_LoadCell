@@ -29,5 +29,5 @@ latex_elements = {
 }
 latex_documents = [
   (master_doc, 'Nanoshield_LoadCell.tex', u'Nanoshield\_LoadCell Documentation',
-   u'Nanoshield_LoadCell', 'manual'),
+   u'Nanoshield\_LoadCell', 'manual'),
 ]
