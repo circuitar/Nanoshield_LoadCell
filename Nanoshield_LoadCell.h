@@ -1,4 +1,4 @@
-/** @file Nanoshield_LoadCell.h
+/** @file
  * Nanoshield_LoadCell Arduino library.
  *
  * This is an Arduino library to measure weight using load cells with the ADS1230 IC from Texas Instruments.

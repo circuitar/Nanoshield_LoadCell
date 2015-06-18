@@ -1,4 +1,4 @@
-/**
+/** @file
  * This is an Arduino library to measure weight using load cells with the ADS1230 IC from Texas Instruments.
  *
  * Copyright (c) 2015 Circuitar
