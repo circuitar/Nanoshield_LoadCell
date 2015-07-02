@@ -19,7 +19,7 @@ Library features include:
 **Note**: this library uses Timer 2 on the ATmega microcontroller.
 On ATmega168 and ATmega328, usage of this library will interfere with the `tone()` function.
 
-To install, just click **Download ZIP** and install it using **Include Library... / Add .ZIP library** in the Arduino IDE.
+To install, just click **Download ZIP** and install it using **Include Library... > Add .ZIP Library** in the Arduino IDE.
 
 The following examples_ are provided:
 
