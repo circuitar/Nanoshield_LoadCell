@@ -22,6 +22,6 @@ void setup() {
 
 void loop() {
   if (loadCell.updated()) {
-    Serial.println(loadCell.getLatestRawValue(), 0);
+    Serial.println(loadCell.getLatestRawValue());
   }
 }
