@@ -7,21 +7,74 @@
 #include <Nanoshield_LoadCell.h>
 #include <util/atomic.h>
 
-// Use Timer 2 prescaler of 1, 8, 32, 64, 128, 256 or 1024
-#define LOADCELL_PRESCALER     64
+// Configure timer constants for different timers (default to timer 2)
+#if LOADCELL_TIMER == 1
 
-// Possible prescaler values
-#define LOADCELL_PS_1    1
-#define LOADCELL_PS_8    2
-#define LOADCELL_PS_32   3
-#define LOADCELL_PS_64   4
-#define LOADCELL_PS_128  5
-#define LOADCELL_PS_256  6
-#define LOADCELL_PS_1024 7
+#define TCCRxA TCCR1A
+#define TCCRxB TCCR1B
+#define TIMSKx TIMSK1
+#define TCCRxB_VALUE PRESCALER_16BIT_1
+#define PRESCALER 1
+#define TIMER_BITS 16
+#define TIMER_INT_VECTOR TIMER2_OVF_vect
 
-// Utility macros
-#define LOADCELL_TCCR2B(PS) PRIMITIVE_CAT(LOADCELL_PS_, PS)
-#define PRIMITIVE_CAT(a, ...) a ## __VA_ARGS__
+#elif LOADCELL_TIMER == 3
+
+#define TCCRxA TCCR3A
+#define TCCRxB TCCR3B
+#define TIMSKx TIMSK3
+#define TCCRxB_VALUE PRESCALER_16BIT_1
+#define PRESCALER 1
+#define TIMER_BITS 16
+#define TIMER_INT_VECTOR TIMER3_OVF_vect
+
+#elif LOADCELL_TIMER == 4
+
+#define TCCRxA TCCR4A
+#define TCCRxB TCCR4B
+#define TIMSKx TIMSK4
+#define TCCRxB_VALUE PRESCALER_16BIT_1
+#define PRESCALER 1
+#define TIMER_BITS 16
+#define TIMER_INT_VECTOR TIMER4_OVF_vect
+
+#elif LOADCELL_TIMER == 5
+
+#define TCCRxA TCCR5A
+#define TCCRxB TCCR5B
+#define TIMSKx TIMSK5
+#define TCCRxB_VALUE PRESCALER_16BIT_1
+#define PRESCALER 1
+#define TIMER_BITS 16
+#define TIMER_INT_VECTOR TIMER5_OVF_vect
+
+#else
+
+#define TCCRxA TCCR2A
+#define TCCRxB TCCR2B
+#define TIMSKx TIMSK2
+#define TCCRxB_VALUE PRESCALER_8BIT_256
+#define PRESCALER 64
+#define TIMER_BITS 8
+#define TIMER_INT_VECTOR TIMER2_OVF_vect
+
+#endif
+
+// Prescaler values for 8-bit timers
+#define PRESCALER_8BIT_1    1
+#define PRESCALER_8BIT_8    2
+#define PRESCALER_8BIT_32   3
+#define PRESCALER_8BIT_64   4
+#define PRESCALER_8BIT_128  5
+#define PRESCALER_8BIT_256  6
+#define PRESCALER_8BIT_1024 7
+
+// Prescaler values for 16-bit timers
+#define PRESCALER_16BIT_1    1
+#define PRESCALER_16BIT_8    2
+#define PRESCALER_16BIT_64   3
+#define PRESCALER_16BIT_256  4
+#define PRESCALER_16BIT_1024 5
 
 SPISettings Nanoshield_LoadCell::spiSettings = SPISettings(4000000, MSBFIRST, SPI_MODE1);
 int Nanoshield_LoadCell::timeout = 120;
@@ -68,10 +121,10 @@ void Nanoshield_LoadCell::begin(bool calibrate) {
   SPI.begin();
   SPI.usingInterrupt(255);
   
-  // Configure timer 2
-  TCCR2A = 0b00000000;
-  TCCR2B = LOADCELL_TCCR2B(LOADCELL_PRESCALER);
-  TIMSK2 = 0b00000001;
+  // Configure timer
+  TCCRxA = 0b00000000;
+  TCCRxB = TCCRxB_VALUE;
+  TIMSKx = 0b00000001;
 }
 
 bool Nanoshield_LoadCell::updated() {
@@ -202,10 +255,11 @@ void timerOverflowIsr(int i) {
   loadCells[i]->readDataIfReady();
 }
 
-ISR(TIMER2_OVF_vect) {
-  // Process ISR for all configured load cells at about 100Hz
-  //  Each cycle = 10240uS (rounding to make division exact for 16MHz)
-  if (++timerOvfCount * clockCyclesToMicroseconds(256 * LOADCELL_PRESCALER) >= 10240) {
+ISR(TIMER_INT_VECTOR) {
+  // Process ISR for all configured load cells at a rate slightly higher than 80Hz (maximum ADS1230 sample rate)
+  //  Each timer cycle = 4096uS (8-bit timer with prescaler = 256 or 16-bit timer with prescaler = 1)
+  //  Three timer cycles = 12288uS ~ 81.38Hz
+  if (++timerOvfCount * clockCyclesToMicroseconds((unsigned long)PRESCALER << TIMER_BITS) >= 12288) {
     for (uint8_t i = 0; i < loadCellCount; i++) {
       timerOverflowIsr(i);
     }
