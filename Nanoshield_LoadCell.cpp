@@ -28,7 +28,7 @@ int Nanoshield_LoadCell::timeout = 120;
 
 static Nanoshield_LoadCell* loadCells[15]; // Pointers to all registered load cell objects
 static uint8_t loadCellCount = 0;          // Number of registered load cell objects
-static uint8_t t2Count = 0;                // Number of times Timer 2 has overflowed
+static uint8_t timerOvfCount = 0;          // Timer overflow counter
 
 Nanoshield_LoadCell::Nanoshield_LoadCell(float capacity, float sensitivity, int cs,
                                          bool hiGain, int numSamples) {
@@ -142,11 +142,11 @@ void Nanoshield_LoadCell::calibrate() {
   }
 }
 
-void Nanoshield_LoadCell::TIMER2_OVF_ISR() {
+void Nanoshield_LoadCell::readDataIfReady() {
   // Check if there is new data to read
   SPI.beginTransaction(spiSettings);
   digitalWrite(cs, LOW);
-  if (digitalRead(12) == LOW) {
+  if (digitalRead(MISO) == LOW) {
     // Read data via SPI if /DRDY is low
     int32_t sample = 0;
     sample |= SPI.transfer(0);
@@ -198,12 +198,17 @@ void Nanoshield_LoadCell::resetBuffer() {
   }
 }
 
+void timerOverflowIsr(int i) {
+  loadCells[i]->readDataIfReady();
+}
+
 ISR(TIMER2_OVF_vect) {
   // Process ISR for all configured load cells at about 100Hz
   //  Each cycle = 10240uS (rounding to make division exact for 16MHz)
-  if (10240 / clockCyclesToMicroseconds(256 * LOADCELL_PRESCALER)) {
+  if (++timerOvfCount * clockCyclesToMicroseconds(256 * LOADCELL_PRESCALER) >= 10240) {
     for (uint8_t i = 0; i < loadCellCount; i++) {
-      loadCells[i]->TIMER2_OVF_ISR();
+      timerOverflowIsr(i);
     }
+    timerOvfCount = 0;
   }
 }

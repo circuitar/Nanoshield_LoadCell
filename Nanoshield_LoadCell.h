@@ -104,13 +104,6 @@ class Nanoshield_LoadCell
      */
     void calibrate();
 
-    /**
-     * Timer 2 ISR.
-     *
-     * Checks all existing modules to see if there is new data available.
-     */
-    void TIMER2_OVF_ISR();
-
   private:
     static SPISettings spiSettings;
     static int timeout;
@@ -129,7 +122,10 @@ class Nanoshield_LoadCell
     uint8_t tail;
     int32_t samples[LOADCELL_MAX_SAMPLES];
     
+    void readDataIfReady();
     void resetBuffer();
+
+    friend void timerOverflowIsr(int i);
 };
 
 #endif
