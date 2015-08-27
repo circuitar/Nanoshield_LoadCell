@@ -1,4 +1,5 @@
 /**
+ * @file MultiWeight.ino
  * Read multiple load cells using the ADS1230 IC in the LoadCell Nanoshield.
  *
  * This example uses the following default settings for both load cells:
