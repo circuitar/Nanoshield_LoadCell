@@ -19,6 +19,15 @@
 #define LOADCELL_MAX_SAMPLES 10
 
 /**
+ * Timer to use for sampling ADS1230. Timers 1 to 5 are supported.
+ */
+#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
+#define LOADCELL_TIMER 5
+#else
+#define LOADCELL_TIMER 2
+#endif
+
+/**
  * A LoadCell Nanoshield or similar module using the ADS1230 IC.
  */
 class Nanoshield_LoadCell
@@ -104,13 +113,6 @@ class Nanoshield_LoadCell
      */
     void calibrate();
 
-    /**
-     * Timer 2 ISR.
-     *
-     * Checks all existing modules to see if there is new data available.
-     */
-    void TIMER2_OVF_ISR();
-
   private:
     static SPISettings spiSettings;
     static int timeout;
@@ -129,7 +131,10 @@ class Nanoshield_LoadCell
     uint8_t tail;
     int32_t samples[LOADCELL_MAX_SAMPLES];
     
+    void readDataIfReady();
     void resetBuffer();
+
+    friend void timerOverflowIsr(int i);
 };
 
 #endif

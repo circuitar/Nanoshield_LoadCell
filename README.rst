@@ -16,8 +16,8 @@ Library features include:
 * Continuous sampling using hardware timer (Timer 2)
 * ADS1230 offset calibration
 
-**Note**: this library uses Timer 2 on the ATmega microcontroller.
-On ATmega168 and ATmega328, usage of this library will interfere with the `tone()` function.
+**Note**: this library uses Timer 2 on the ATmega microcontroller, or Timer 5 on ATmega2560 and ATmega1280.
+On ATmega168 and ATmega328 (i.e. Arduino UNO or similar), usage of this library will interfere with the `tone()` function.
 
 To install, just click **Download ZIP** and install it using **Sketch > Include Library... > Add .ZIP Library** in the Arduino IDE.
 
