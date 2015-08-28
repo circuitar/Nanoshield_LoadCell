@@ -31,7 +31,10 @@ Nanoshield_LoadCell lc5(100000, 1.5, A3);
 void setup() {
   Serial.begin(9600);
   lc1.begin();
-  //lc2.begin();
+  lc2.begin();
+  lc3.begin();
+  lc4.begin();
+  lc5.begin();
   
   // Wait for calibration and set current value to zero weight (tare)
   while (!lc1.updated()
