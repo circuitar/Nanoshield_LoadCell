@@ -23,6 +23,8 @@
  */
 #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
 #define LOADCELL_TIMER 5
+#elif defined(__AVR_ATmega32U4__)
+#define LOADCELL_TIMER 3
 #else
 #define LOADCELL_TIMER 2
 #endif
