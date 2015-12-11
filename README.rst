@@ -5,7 +5,7 @@ This is an Arduino library to measure weight using load cells with the ADS1230 I
 
 * Source code: https://github.com/circuitar/Nanoshield_LoadCell
 * Documentation: http://nanoshield-loadcell.readthedocs.org/
-* Reference board: `LoadCell Nanoshield`_ from Circuitar
+* Reference board: `LoadCell Nanoshield`_ from Circuitar_
 
 Library features include:
 
@@ -32,7 +32,8 @@ The following examples_ are provided:
 
 .. _ReadTheDocs: http://nanoshield-loadcell.readthedocs.org
 .. _GitHub: https://github.com/circuitar/Nanoshield_LoadCell
-.. _`LoadCell Nanoshield`: https://www.circuitar.com.br/en/nanoshields/modules/loadcell/
+.. _`LoadCell Nanoshield`: https://www.circuitar.com/nanoshields/modules/loadcell/
+.. _Circuitar: https://www.circuitar.com/
 .. _examples: https://github.com/circuitar/Nanoshield_LoadCell/blob/master/examples/
 .. _ReadWeight: https://github.com/circuitar/Nanoshield_LoadCell/blob/master/examples/ReadWeight/ReadWeight.ino
 .. _MultiWeight: https://github.com/circuitar/Nanoshield_LoadCell/blob/master/examples/MultiWeight/MultiWeight.ino
