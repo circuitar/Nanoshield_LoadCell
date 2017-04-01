@@ -24,6 +24,7 @@ To install, just click **Download ZIP** and install it using **Sketch > Include 
 The following examples_ are provided:
 
 * ReadWeight_ shows how to do a simple weight measurement using a load cell.
+* LcdDigitalWeightScale_ a digital weight scale using a load cell and an LCD display.
 * MultiWeight_ shows how to read more than one weight using multiple load cells.
 * ReadRawValue_ reads the raw 20-bit integer value from the ADS1230 IC.
 * ReadWeightNoAveraging_ reads weight without averaging (default is to average the last 10 samples).
@@ -34,6 +35,7 @@ The following examples_ are provided:
 .. _Circuitar: https://www.circuitar.com/
 .. _examples: https://github.com/circuitar/Nanoshield_LoadCell/blob/master/examples/
 .. _ReadWeight: https://github.com/circuitar/Nanoshield_LoadCell/blob/master/examples/ReadWeight/ReadWeight.ino
+.. _LcdDigitalWeightScale: https://github.com/circuitar/Nanoshield_LoadCell/blob/master/examples/LcdDigitalWeightScale/LcdDigitalWeightScale.ino
 .. _MultiWeight: https://github.com/circuitar/Nanoshield_LoadCell/blob/master/examples/MultiWeight/MultiWeight.ino
 .. _ReadRawValue: https://github.com/circuitar/Nanoshield_LoadCell/blob/master/examples/ReadRawValue/ReadRawValue.ino
 .. _ReadWeightNoAveraging: https://github.com/circuitar/Nanoshield_LoadCell/blob/master/examples/ReadWeightNoAveraging/ReadWeightNoAveraging.ino
