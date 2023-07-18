@@ -31,7 +31,7 @@ The following examples_ are provided:
 * ReadWeightLowGain_ uses low gain to measure a wider weight range.
 * OffsetCalibration_ shows how to use offset calibration.
 
-.. _`LoadCell Nanoshield`: https://www.circuitar.com.br/nanoshields/modulos/loadcell/
+.. _`LoadCell Nanoshield`: https://www.circuitar.com.br/nanoshields/modulos/load-cell/
 .. _Circuitar: https://www.circuitar.com.br/
 .. _examples: https://github.com/circuitar/Nanoshield_LoadCell/blob/master/examples/
 .. _ReadWeight: https://github.com/circuitar/Nanoshield_LoadCell/blob/master/examples/ReadWeight/ReadWeight.ino
